@@ -83,7 +83,8 @@ export class UserService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    const user = this.userRepository.delete(id);
+    return user;
   }
 
   async daftar(createUserDto: CreateUserDto) {
