@@ -35,6 +35,9 @@ export class Barang {
   @Column()
   deskripsi: string;
 
+  @Column('text')
+  deskripsi_singkat: string;
+
   @Column({ default: 0 })
   total_dibeli: number;
 

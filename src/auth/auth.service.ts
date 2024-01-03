@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { SHA1 } from 'crypto-js';
@@ -12,8 +12,19 @@ export class AuthService {
 
   async signIn(email, pass) {
     const user = await this.usersService.findEmail(email);
+    if (user == null) {
+      return {
+        access_token: null,
+        message: 'Email tidak terdaftar',
+        status: 404,
+      };
+    }
     if (SHA1(pass).toString() !== user.password) {
-      throw new UnauthorizedException();
+      return {
+        access_token: null,
+        message: 'Password salah',
+        status: 401,
+      };
     }
     const payload = {
       id: user.id,
@@ -22,6 +33,8 @@ export class AuthService {
     };
     return {
       access_token: await this.jwtService.signAsync(payload),
+      message: 'Login berhasil',
+      status: 200,
     };
   }
 }

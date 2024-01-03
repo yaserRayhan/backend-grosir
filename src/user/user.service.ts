@@ -74,7 +74,6 @@ export class UserService {
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    console.log(updateUserDto);
     if (updateUserDto.password) {
       updateUserDto.password = SHA1(updateUserDto.password).toString();
     }
@@ -100,7 +99,6 @@ export class UserService {
     }
     try {
       createUserDto['password'] = SHA1(createUserDto.password).toString();
-      console.log(createUserDto);
       const user = await this.userRepository.create(createUserDto);
       const save = await this.userRepository.save(user);
       return {

@@ -29,12 +29,20 @@ export class BarangService {
         nama_barang: Like(`%${query.search}%`),
       };
     }
+    let order;
+    if (query.order) {
+      const queryOrder = query.order.split(':');
+      order = {
+        [queryOrder[0]]: queryOrder[1],
+      };
+    }
     const take = parseInt(query.pageSize ? query.pageSize : 10);
     const skip = ((query.page ? query.page : 1) - 1) * take;
     const barang = await this.barangRepository.findAndCount({
       take: take,
       skip: skip,
       where: where,
+      order: order,
     });
 
     return {

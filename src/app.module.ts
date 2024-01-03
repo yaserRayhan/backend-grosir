@@ -5,6 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { BarangModule } from './barang/barang.module';
+import { CartModule } from './cart/cart.module';
+import { TransaksiModule } from './transaksi/transaksi.module';
+import { BarangDibeliModule } from './barangDibeli/barangDibeli.module';
 
 @Module({
   imports: [
@@ -21,6 +24,9 @@ import { BarangModule } from './barang/barang.module';
     UserModule,
     AuthModule,
     BarangModule,
+    CartModule,
+    TransaksiModule,
+    BarangDibeliModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -8,4 +8,5 @@ export class CreateBarangDto {
   minimal_diskon: number;
   deskripsi: string;
   total_dibeli: number;
+  deskripsi_singkat: string;
 }

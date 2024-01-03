@@ -1,9 +1,11 @@
+import { Transaksi } from 'src/transaksi/entities/transaksi.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -41,6 +43,9 @@ export class User {
     default: 'user',
   })
   level: string;
+
+  @OneToMany(() => Transaksi, (transaksi) => transaksi.user)
+  transaksi: Transaksi[];
 
   @CreateDateColumn()
   created_at: Date;
