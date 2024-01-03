@@ -7,11 +7,13 @@ import {
   UseGuards,
   Put,
   Req,
+  Post,
 } from '@nestjs/common';
 import { TransaksiService } from './transaksi.service';
 import { UpdateTransaksiDto } from './dto/update-transaksi.dto';
 import { AuthAdminGuard } from 'src/auth/authAdmin.guard';
 import { AuthUserGuard } from 'src/auth/authUser.guard';
+import { CreateTransaksiDto } from './dto/create-transaksi.dto';
 
 @Controller('transaksi')
 export class TransaksiController {
@@ -24,9 +26,15 @@ export class TransaksiController {
   }
 
   @UseGuards(AuthUserGuard)
-  @Get('pembelian')
-  async findPembelian(@Req() req) {
-    return await this.transaksiService.createPembelian(req.user.id);
+  @Post('pembelian')
+  async findPembelian(
+    @Req() req,
+    @Body() createTransaksiDto: CreateTransaksiDto,
+  ) {
+    return await this.transaksiService.createPembelian(
+      req.user.id,
+      createTransaksiDto,
+    );
   }
 
   @UseGuards(AuthUserGuard)

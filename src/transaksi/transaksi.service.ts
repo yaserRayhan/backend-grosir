@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { Transaksi } from './entities/transaksi.entity';
 import { BarangDibeli } from 'src/barangDibeli/entities/barangDibeli.entity';
 import { CartService } from 'src/cart/cart.service';
+import { BarangService } from 'src/barang/barang.service';
 
 @Injectable()
 export class TransaksiService {
@@ -15,6 +16,7 @@ export class TransaksiService {
     @InjectRepository(BarangDibeli)
     private barangDibeliRepository: Repository<BarangDibeli>,
     private cartService: CartService,
+    private barangService: BarangService,
   ) {}
 
   findAll() {
@@ -24,7 +26,7 @@ export class TransaksiService {
     return transaksi;
   }
 
-  async createPembelian(id: number) {
+  async createPembelian(id: number, ctd: CreateTransaksiDto) {
     const transaksi = await this.cartService.findAll(id);
 
     let totalHarga = 0;
@@ -42,10 +44,10 @@ export class TransaksiService {
       total_item: transaksi.count,
       total_diskon: totalDiskon,
       total_bayar: totalHarga - totalDiskon,
-      status: 'menunggu pembayaran',
-      bukti_pembayaran: '',
-      no_rekening_pembayar: '',
-      nama_pembayar: '',
+      status: 'diproses',
+      bukti_pembayaran: ctd.bukti_pembayaran,
+      no_rekening_pembayar: ctd.no_rekening_pembayar,
+      nama_pembayar: ctd.nama_pembayar,
       user: { id: id },
     };
 
@@ -62,6 +64,10 @@ export class TransaksiService {
       };
       await this.barangDibeliRepository.save(barangDibeli);
       await this.cartService.remove(trk.id, id);
+
+      //update stok barang
+      trk.barang.stok -= trk.jumlah;
+      await this.barangService.update(trk.barang.id, trk.barang);
     });
     const transaksiBaru = await this.findOne(newTransaksi.id);
     return {
