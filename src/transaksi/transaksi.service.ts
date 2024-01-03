@@ -22,6 +22,7 @@ export class TransaksiService {
   findAll() {
     const transaksi = this.transaksiRepository.find({
       relations: ['user', 'barangDibeli', 'barangDibeli.barang'],
+      order: { id: 'DESC' },
     });
     return transaksi;
   }
@@ -88,7 +89,11 @@ export class TransaksiService {
   }
 
   update(id: number, updateTransaksiDto: UpdateTransaksiDto) {
-    return `This action updates a #${id} transaksi`;
+    const transaksi = this.transaksiRepository.update(
+      { id: id },
+      updateTransaksiDto,
+    );
+    return transaksi;
   }
 
   remove(id: number) {
