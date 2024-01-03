@@ -68,6 +68,7 @@ export class TransaksiService {
 
       //update stok barang
       trk.barang.stok -= trk.jumlah;
+      trk.barang.total_dibeli += trk.jumlah;
       await this.barangService.update(trk.barang.id, trk.barang);
     });
     const transaksiBaru = await this.findOne(newTransaksi.id);
